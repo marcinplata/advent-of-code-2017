@@ -193,9 +193,9 @@ def read_file(path):
 def create_firewall(firewall_seed):
     struct = {}
     for f, v in firewall_seed:
-        # n-1 non-caught rounds for every n-length block go forward and backward
+        # we have 2*(n-1)-1 non-caught rounds for every n-length block (going forward and backward)
         # e.g. n = 4: |X|->|->|->|<-|<-|<-|
-        struct[f] = (v-1)*2
+        struct[f] = 2*(v-1)
     return struct
 
 
@@ -335,7 +335,7 @@ caught?
 
 def go_throw_firewall_with_delay(struct, delay):
     caught = []
-    for i in range(max(struct.keys()) + 1):
+    for i in range(max(struct.keys())+1):
         if i in struct and (i+delay) % struct[i] == 0:
             caught.append(i)
     return len(caught)
