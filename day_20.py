@@ -56,12 +56,11 @@ def read_file(path):
 
 
 def find_closest_particle(particles):
-    return min(enumerate(particles), key=lambda x: np.sum(np.abs(x[1][2])))
+    return min(enumerate(particles), key=lambda x: np.sum(np.abs(x[1][2])))[0]
 
 
 particles = read_file("tests/day_20_test")
-maxi = find_closest_particle(particles)
-print(maxi[0])
+print(find_closest_particle(particles))
 
 
 """
@@ -103,15 +102,14 @@ from collections import Counter
 
 
 def update(particle):
-    particle[1] += particle[2]
-    particle[0] += particle[1]
+    particle[:, 1] += particle[:, 2]
+    particle[:, 0] += particle[:, 1]
     return particle
 
 
 def run(particles):
     for _ in range(500):
-        for p in particles:
-            update(p)
+        particles = update(particles)
         c = Counter([tuple(p[0]) for p in particles]).most_common()
         c = set(map(lambda x: x[0], filter(lambda x: x[1] > 1, c)))
         particles = np.array([p for p in particles if tuple(p[0]) not in c])
